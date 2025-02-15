@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Clock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            transition: background-color 0.3s ease;
+        }
+
+        .dark-mode {
+            background-color: #222;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .clock {
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls select, .controls button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .cronometer {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        .map-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+
+        .favorites {
+            margin-top: 20px;
+        }
+
+        .dark-mode .clock-container {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Relógio Mundial</h1>
+
+    <div class="clock-container">
+        <div id="world-clock" class="clock">Carregando...</div>
+        <div id="time-difference" class="clock"></div>
+        <div class="controls">
+            <label for="country-select">Selecione um país:</label>
+            <select id="country-select">
+                <option value="America/New_York">Nova York (EST)</option>
+                <option value="Europe/London">Londres (GMT)</option>
+                <option value="Asia/Tokyo">Tóquio (JST)</option>
+                <option value="Australia/Sydney">Sydney (AEST)</option>
+                <option value="Brazil/East">Brasília (BRT)</option>
+                <option value="Asia/Kolkata">Nova Déli (IST)</option>
+                <option value="Africa/Cairo">Cairo (EET)</option>
+                <option value="Europe/Paris">Paris (CET)</option>
+            </select>
+            <button onclick="addToFavorites()">Adicionar aos Favoritos</button>
+            <button onclick="toggleDarkMode()">Modo Escuro</button>
+        </div>
+    </div>
+
+    <div class="cronometer">
+        <h2>Cronômetro</h2>
+        <span id="cronometer">00:00:00</span>
+        <button onclick="startCronometer()">Iniciar</button>
+        <button onclick="stopCronometer()">Parar</button>
+        <button onclick="resetCronometer()">Reiniciar</button>
+    </div>
+
+    <div class="favorites">
+        <h2>Favoritos</h2>
+        <ul id="favorites-list"></ul>
+    </div>
+
+    <div class="map-container">
+        <h2>Mapa Interativo</h2>
+        <iframe src="https://www.timeanddate.com/worldclock/" width="100%" height="400" frameborder="0"></iframe>
+    </div>
+
+    <script>
+        let intervalId = null;
+        let startTime = null;
+
+        function updateTime() {
+            const selectedCountry = document.getElementById('country-select').value;
+            const worldClockDiv = document.getElementById('world-clock');
+            const timeDifferenceDiv = document.getElementById('time-difference');
+
+            const localTime = new Date();
+            const utcTime = localTime.getTime() + (localTime.getTimezoneOffset() * 60000);
+            const countryTime = new Date(Intl.DateTimeFormat().resolvedOptions().timeZone === selectedCountry ? utcTime : (new Date()).toLocaleString("en-US", { timeZone: selectedCountry }));
+
+            worldClockDiv.textContent = `Horário em ${selectedCountry}: ${countryTime.toLocaleTimeString()}`;
+
+            const difference = Math.abs((localTime - countryTime) / 1000 / 60);
+            timeDifferenceDiv.textContent = `Diferença de horário: ${difference.toFixed(0)} minutos`;
+        }
+
+        setInterval(updateTime, 1000);
+
+        function startCronometer() {
+            if (!intervalId) {
+                startTime = Date.now() - (startTime || 0);
+                intervalId = setInterval(() => {
+                    const elapsed = Date.now() - startTime;
+                    const hours = Math.floor(elapsed / 3600000);
+                    const minutes = Math.floor((elapsed % 3600000) / 60000);
+                    const seconds = Math.floor((elapsed % 60000) / 1000);
+                    document.getElementById('cronometer').textContent = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+
+                    if (hours > 0 && !document.getElementById('alarm-sound')) {
+                        playAlarmSound();
+                    }
+                }, 100);
+            }
+        }
+
+        function stopCronometer() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+
+        function resetCronometer() {
+            stopCronometer();
+            startTime = null;
+            document.getElementById('cronometer').textContent = "00:00:00";
+        }
+
+        function padZero(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function addToFavorites() {
+            const selectedCountry = document.getElementById('country-select').value;
+            const favoritesList = document.getElementById('favorites-list');
+            const existingItem = Array.from(favoritesList.children).find(item => item.textContent.includes(selectedCountry));
+
+            if (!existingItem) {
+                const li = document.createElement('li');
+                li.textContent = selectedCountry;
+                favoritesList.appendChild(li);
+            }
+        }
+
+        function playAlarmSound() {
+            const audio = new Audio('https://notificationsounds.com/soundfiles/10d4c7411739457cb5bb221ce1c919c7/file.mp3');
+            audio.play();
+            const alarmSoundElement = document.getElementById('alarm-sound');
+            if (!alarmSoundElement) {
+                document.body.appendChild(audio);
+                audio.id = 'alarm-sound';
+            }
+        }
+    </script>
+</body>
+</html>
