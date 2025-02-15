@@ -129,13 +129,27 @@
             margin-top: 20px;
         }
 
-        ul {
+        .country-list {
             list-style: none;
             padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        li {
-            margin: 5px 0;
+        .country-list li {
+            margin: 5px;
+            padding: 10px;
+            background: #4c6ef5;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .country-list li:hover {
+            background: #3b5bdb;
         }
 
         @media (max-width: 600px) {
@@ -206,17 +220,13 @@
             <ul id="favorites"></ul>
             <button onclick="addToFavorites()">Adicionar aos Favoritos</button>
         </div>
-
-        <div id="history-section">
-            <h3>Histórico</h3>
-            <ul id="history"></ul>
-        </div>
     </div>
 
     <div id="map"></div>
+    <ul class="country-list" id="country-list"></ul>
 
     <footer>
-        Desenvolvido por [Seu Nome] | Todos os direitos reservados.
+        Desenvolvido por Marlon Felipe | Todos os direitos reservados.
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
@@ -243,8 +253,6 @@
             const hoursDifference = Math.floor(Math.abs((localTime - countryTime) / 1000 / 60 / 60));
             const minutesDifference = Math.floor(Math.abs((localTime - countryTime) / 1000 / 60) % 60);
             document.getElementById('time-difference').textContent = `Diferença de horário: ${hoursDifference} horas e ${minutesDifference} minutos`;
-
-            addToHistory(selectedCountry, countryTime.toLocaleTimeString());
         }
 
         function updateAnalogClock(time) {
@@ -294,13 +302,6 @@
 
         renderFavorites();
 
-        function addToHistory(country, time) {
-            const historyList = document.getElementById('history');
-            const li = document.createElement('li');
-            li.textContent = `Horário em ${country}: ${time}`;
-            historyList.appendChild(li);
-        }
-
         const map = L.map('map').setView([0, 0], 2);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -308,43 +309,52 @@
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        map.on('click', function(e) {
-            const latlng = e.latlng;
-            const timezone = tzlookup(latlng.lat, latlng.lng); // Usar API como https://github.com/evansiroky/timezone-boundary-builder
-            alert(`Horário em ${timezone}: ${new Date().toLocaleString("en-US", { timeZone: timezone })}`);
+        const capitals = [
+            { name: "Nova York", lat: 40.7128, lng: -74.0060, tz: "America/New_York" },
+            { name: "Londres", lat: 51.5074, lng: -0.1278, tz: "Europe/London" },
+            { name: "Tóquio", lat: 35.6895, lng: 139.6917, tz: "Asia/Tokyo" },
+            { name: "Sydney", lat: -33.8688, lng: 151.2093, tz: "Australia/Sydney" },
+            { name: "Brasília", lat: -15.7801, lng: -47.9292, tz: "Brazil/East" },
+            { name: "Nova Déli", lat: 28.7041, lng: 77.1025, tz: "Asia/Kolkata" },
+            { name: "Cairo", lat: 30.0444, lng: 31.2357, tz: "Africa/Cairo" },
+            { name: "Paris", lat: 48.8566, lng: 2.3522, tz: "Europe/Paris" },
+            { name: "Pequim", lat: 39.9042, lng: 116.4074, tz: "Asia/Shanghai" },
+            { name: "Dubai", lat: 25.2048, lng: 55.2708, tz: "Asia/Dubai" },
+            { name: "Moscou", lat: 55.7558, lng: 37.6173, tz: "Europe/Moscow" },
+            { name: "Los Angeles", lat: 34.0522, lng: -118.2437, tz: "America/Los_Angeles" },
+            { name: "Chicago", lat: 41.8781, lng: -87.6298, tz: "America/Chicago" },
+            { name: "Cidade do México", lat: 19.4326, lng: -99.1332, tz: "America/Mexico_City" },
+            { name: "Bangcoc", lat: 13.7563, lng: 100.5018, tz: "Asia/Bangkok" },
+            { name: "Seul", lat: 37.5665, lng: 126.9780, tz: "Asia/Seoul" },
+            { name: "Jacarta", lat: -6.2088, lng: 106.8456, tz: "Asia/Jakarta" },
+            { name: "Berlim", lat: 52.5200, lng: 13.4050, tz: "Europe/Berlin" },
+            { name: "Roma", lat: 41.9028, lng: 12.4964, tz: "Europe/Rome" },
+            { name: "Madri", lat: 40.4165, lng: -3.7026, tz: "Europe/Madrid" },
+            { name: "Estocolmo", lat: 59.3293, lng: 18.0686, tz: "Europe/Stockholm" },
+            { name: "Istambul", lat: 41.0082, lng: 28.9784, tz: "Europe/Istanbul" }
+        ];
+
+        capitals.forEach(capital => {
+            const marker = L.marker([capital.lat, capital.lng]).addTo(map);
+            marker.bindPopup(`Horário em ${capital.name}: <span id="${capital.tz}-popup">${new Date().toLocaleTimeString("en-US", { timeZone: capital.tz })}</span>`);
+
+            const li = document.createElement('li');
+            li.textContent = capital.name;
+            li.onclick = () => {
+                document.getElementById('country-select').value = capital.tz;
+                updateTime();
+            };
+            document.getElementById('country-list').appendChild(li);
         });
 
-        function startCronometer() {
-            if (!intervalId) {
-                startTime = Date.now() - elapsedTime;
-                intervalId = setInterval(updateCronometer, 10);
-            }
-        }
-
-        function pauseCronometer() {
-            if (intervalId) {
-                clearInterval(intervalId);
-                intervalId = null;
-            }
-        }
-
-        function resetCronometer() {
-            pauseCronometer();
-            elapsedTime = 0;
-            document.getElementById('cronometer').textContent = "00:00:00";
-        }
-
-        function updateCronometer() {
-            elapsedTime = Date.now() - startTime;
-            const hours = Math.floor(elapsedTime / 3600000);
-            const minutes = Math.floor((elapsedTime % 3600000) / 60000);
-            const seconds = Math.floor((elapsedTime % 60000) / 1000);
-            document.getElementById('cronometer').textContent = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
-        }
-
-        function padZero(num) {
-            return num.toString().padStart(2, '0');
-        }
+        setInterval(() => {
+            capitals.forEach(capital => {
+                const popupElement = document.getElementById(`${capital.tz}-popup`);
+                if (popupElement) {
+                    popupElement.textContent = new Date().toLocaleTimeString("en-US", { timeZone: capital.tz });
+                }
+            });
+        }, 1000);
     </script>
 </body>
 </html>
