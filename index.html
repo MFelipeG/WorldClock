@@ -78,6 +78,7 @@
             transform-origin: center;
             background: #4c6ef5;
             border-radius: 10px;
+            transition: transform 0.5s ease; /* Transição suave */
         }
 
         .hour-hand {
@@ -153,6 +154,11 @@
             padding: 10px 15px;
             border-radius: 5px;
             font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .comparison-section li:hover {
+            background: #3b5bdb;
         }
 
         @media (max-width: 600px) {
