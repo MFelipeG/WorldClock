@@ -69,27 +69,27 @@
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .analog-clock::before,
-        .analog-clock::after {
-            content: '';
+        /* Ponteiros do relógio */
+        .hour-hand,
+        .minute-hand {
             position: absolute;
-            background: #4c6ef5;
-        }
-
-        .analog-clock::before {
-            width: 2px;
-            height: 120px;
             top: 50%;
             left: 50%;
+            transform-origin: center;
+            background: #4c6ef5;
+            border-radius: 10px;
+        }
+
+        .hour-hand {
+            width: 4px;
+            height: 100px;
             transform: translate(-50%, -50%) rotate(90deg);
         }
 
-        .analog-clock::after {
-            width: 120px;
-            height: 2px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .minute-hand {
+            width: 2px;
+            height: 150px;
+            transform: translate(-50%, -50%) rotate(90deg);
         }
 
         .controls {
@@ -141,6 +141,14 @@
                 height: 200px;
             }
 
+            .hour-hand {
+                height: 80px;
+            }
+
+            .minute-hand {
+                height: 120px;
+            }
+
             .digital-clock {
                 font-size: 1.8rem;
             }
@@ -153,7 +161,10 @@
     <div class="container">
         <div class="clock-container">
             <div id="digital-clock" class="digital-clock">Carregando...</div>
-            <div id="analog-clock" class="analog-clock"></div>
+            <div id="analog-clock" class="analog-clock">
+                <div class="hour-hand"></div>
+                <div class="minute-hand"></div>
+            </div>
         </div>
 
         <div class="controls">
@@ -300,13 +311,14 @@
         function updateAnalogClock(time) {
             const hour = time.getHours() % 12;
             const minute = time.getMinutes();
-            const second = time.getSeconds();
 
-            const hourHand = document.querySelector('.analog-clock::before');
-            const minuteHand = document.querySelector('.analog-clock::after');
+            // Calcula o ângulo dos ponteiros
+            const hourAngle = (hour * 30) + (minute * 0.5); // 30 graus por hora + 0.5 graus por minuto
+            const minuteAngle = minute * 6; // 6 graus por minuto
 
-            hourHand.style.transform = `translate(-50%, -50%) rotate(${hour * 30 + minute * 0.5}deg)`;
-            minuteHand.style.transform = `translate(-50%, -50%) rotate(${minute * 6}deg)`;
+            // Aplica a rotação aos ponteiros
+            document.querySelector('.hour-hand').style.transform = `translate(-50%, -50%) rotate(${hourAngle}deg)`;
+            document.querySelector('.minute-hand').style.transform = `translate(-50%, -50%) rotate(${minuteAngle}deg)`;
         }
 
         setInterval(updateTime, 1000);
@@ -339,6 +351,7 @@
                 const marker = L.marker([capitalData.lat, capitalData.lng]).addTo(map);
                 marker.bindPopup(`Horário em ${country.name}: <span id="${country.tz}-popup">${new Date().toLocaleTimeString("en-US", { timeZone: country.tz })}</span>`);
 
+                // Atualiza o relógio ao clicar no marcador
                 marker.on('click', () => {
                     document.getElementById('country-select').value = country.tz;
                     updateTime();
@@ -386,4 +399,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
