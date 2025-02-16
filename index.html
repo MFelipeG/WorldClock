@@ -59,40 +59,6 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        .analog-clock {
-            position: relative;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, #fff, #e0eafc);
-            border: 4px solid #4c6ef5;
-            border-radius: 50%;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Ponteiros do relógio */
-        .hour-hand,
-        .minute-hand {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: center;
-            background: #4c6ef5;
-            border-radius: 10px;
-            transition: transform 0.5s ease; /* Transição suave */
-        }
-
-        .hour-hand {
-            width: 6px;
-            height: 80px;
-            transform: translate(-50%, -50%) rotate(90deg);
-        }
-
-        .minute-hand {
-            width: 4px;
-            height: 120px;
-            transform: translate(-50%, -50%) rotate(90deg);
-        }
-
         .controls {
             margin-top: 20px;
         }
@@ -166,19 +132,6 @@
                 font-size: 2rem;
             }
 
-            .analog-clock {
-                width: 200px;
-                height: 200px;
-            }
-
-            .hour-hand {
-                height: 60px;
-            }
-
-            .minute-hand {
-                height: 100px;
-            }
-
             .digital-clock {
                 font-size: 1.8rem;
             }
@@ -191,10 +144,6 @@
     <div class="container">
         <div class="clock-container">
             <div id="digital-clock" class="digital-clock">Carregando...</div>
-            <div id="analog-clock" class="analog-clock">
-                <div class="hour-hand"></div>
-                <div class="minute-hand"></div>
-            </div>
         </div>
 
         <div class="controls">
@@ -226,7 +175,6 @@
                 <option value="Europe/Stockholm">Estocolmo (CET)</option>
                 <option value="Europe/Istanbul">Istambul (TRT)</option>
             </select>
-            <button onclick="toggleClockType()">Alternar Relógio</button>
             <button onclick="toggleDarkMode()">Alternar Modo Escuro</button>
             <button onclick="addComparison()">Adicionar à Comparação</button>
         </div>
@@ -249,17 +197,11 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
 
     <script>
-        let clockType = 'digital';
-
         function updateTime() {
             const selectedCountry = document.getElementById('country-select').value;
             const countryTime = new Date().toLocaleString("en-US", { timeZone: selectedCountry });
 
-            if (clockType === 'digital') {
-                document.getElementById('digital-clock').textContent = `Horário em ${selectedCountry}: ${new Date(countryTime).toLocaleTimeString()}`;
-            } else {
-                updateAnalogClock(new Date(countryTime));
-            }
+            document.getElementById('digital-clock').textContent = `Horário em ${selectedCountry}: ${new Date(countryTime).toLocaleTimeString()}`;
 
             const localTime = new Date();
             const hoursDifference = Math.floor(Math.abs((localTime - new Date(countryTime)) / 1000 / 60 / 60));
@@ -267,29 +209,7 @@
             document.getElementById('time-difference').textContent = `Diferença de horário: ${hoursDifference} horas e ${minutesDifference} minutos`;
         }
 
-        function updateAnalogClock(time) {
-            const hour = time.getHours() % 12;
-            const minute = time.getMinutes();
-
-            // Calcula o ângulo dos ponteiros
-            const hourAngle = (hour * 30) + (minute * 0.5); // 30 graus por hora + 0.5 graus por minuto
-            const minuteAngle = minute * 6; // 6 graus por minuto
-
-            // Aplica a rotação aos ponteiros
-            document.querySelector('.hour-hand').style.transform = `translate(-50%, -50%) rotate(${hourAngle}deg)`;
-            document.querySelector('.minute-hand').style.transform = `translate(-50%, -50%) rotate(${minuteAngle}deg)`;
-        }
-
         setInterval(updateTime, 1000);
-
-        function toggleClockType() {
-            clockType = clockType === 'digital' ? 'analog' : 'digital';
-            document.getElementById('digital-clock').style.display = clockType === 'digital' ? 'block' : 'none';
-            document.querySelector('.analog-clock').style.display = clockType === 'analog' ? 'block' : 'none';
-
-            // Atualiza o relógio após alternar
-            updateTime();
-        }
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
