@@ -244,11 +244,9 @@
 
     <script>
         let clockType = 'digital';
-        let intervalId = null;
 
         function updateTime() {
             const selectedCountry = document.getElementById('country-select').value;
-            const localTime = new Date();
             const countryTime = new Date().toLocaleString("en-US", { timeZone: selectedCountry });
 
             if (clockType === 'digital') {
@@ -257,6 +255,7 @@
                 updateAnalogClock(new Date(countryTime));
             }
 
+            const localTime = new Date();
             const hoursDifference = Math.floor(Math.abs((localTime - new Date(countryTime)) / 1000 / 60 / 60));
             const minutesDifference = Math.floor(Math.abs((localTime - new Date(countryTime)) / 1000 / 60) % 60);
             document.getElementById('time-difference').textContent = `Diferença de horário: ${hoursDifference} horas e ${minutesDifference} minutos`;
@@ -282,7 +281,7 @@
             document.getElementById('digital-clock').style.display = clockType === 'digital' ? 'block' : 'none';
             document.querySelector('.analog-clock').style.display = clockType === 'analog' ? 'block' : 'none';
 
-            // Garante que o relógio seja atualizado ao alternar
+            // Atualiza o relógio após alternar
             updateTime();
         }
 
@@ -371,7 +370,7 @@
             return capitals[capitalName];
         }
 
-        // Garante que o relógio seja atualizado ao carregar a página
+        // Inicializa o relógio ao carregar a página
         updateTime();
     </script>
 </body>
