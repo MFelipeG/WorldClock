@@ -14,39 +14,39 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
             color: #333;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, #2c3e50, #1abc9c);
+            background: linear-gradient(135deg, #1f1f1f, #333);
             color: #fff;
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
-            color: #ff6f61;
+            color: #4c6ef5;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 800px;
             padding: 20px;
-            width: 80%;
-            max-width: 600px;
             text-align: center;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        .container.dark-mode {
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-        }
-
         .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             margin: 20px 0;
         }
 
@@ -54,39 +54,38 @@
             font-family: 'Digital-7', monospace;
             font-size: 2.5rem;
             font-weight: bold;
-            color: #ff6f61;
+            color: #4c6ef5;
             letter-spacing: 2px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .analog-clock {
             position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto;
-            background: radial-gradient(circle, #fff, #e0f7fa);
-            border: 4px solid #ff6f61;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #fff, #e0eafc);
+            border: 4px solid #4c6ef5;
             border-radius: 50%;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .analog-clock::before,
         .analog-clock::after {
             content: '';
             position: absolute;
-            background: #ff6f61;
+            background: #4c6ef5;
         }
 
         .analog-clock::before {
             width: 2px;
-            height: 100px;
+            height: 120px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(90deg);
         }
 
         .analog-clock::after {
-            width: 100px;
+            width: 120px;
             height: 2px;
             top: 50%;
             left: 50%;
@@ -104,13 +103,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            background: #ff6f61;
+            background: #4c6ef5;
             color: white;
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
         .controls select:hover, .controls button:hover {
-            background: #ff3e3e;
+            background: #3b5bdb;
             transform: scale(1.05);
         }
 
@@ -137,17 +136,13 @@
                 font-size: 2rem;
             }
 
-            .container {
-                padding: 10px;
+            .analog-clock {
+                width: 200px;
+                height: 200px;
             }
 
             .digital-clock {
                 font-size: 1.8rem;
-            }
-
-            .analog-clock {
-                width: 150px;
-                height: 150px;
             }
         }
     </style>
@@ -339,7 +334,7 @@
         }));
 
         countries.forEach(country => {
-            const capitalData = getCapitalCoordinates(country.name); // Função simulada para obter coordenadas
+            const capitalData = getCapitalCoordinates(country.name);
             if (capitalData) {
                 const marker = L.marker([capitalData.lat, capitalData.lng]).addTo(map);
                 marker.bindPopup(`Horário em ${country.name}: <span id="${country.tz}-popup">${new Date().toLocaleTimeString("en-US", { timeZone: country.tz })}</span>`);
@@ -360,7 +355,6 @@
             });
         }, 1000);
 
-        // Função simulada para obter coordenadas das capitais
         function getCapitalCoordinates(capitalName) {
             const capitals = {
                 "Nova York": { lat: 40.7128, lng: -74.0060 },
@@ -392,4 +386,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
