@@ -14,7 +14,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #a8e063, #56ab2f);
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
             color: #333;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
@@ -27,7 +27,7 @@
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
-            color: #1abc9c;
+            color: #ff6f61;
         }
 
         .container {
@@ -51,9 +51,12 @@
         }
 
         .digital-clock {
-            font-size: 2rem;
+            font-family: 'Digital-7', monospace;
+            font-size: 2.5rem;
             font-weight: bold;
-            color: #1abc9c;
+            color: #ff6f61;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .analog-clock {
@@ -62,7 +65,7 @@
             height: 200px;
             margin: 0 auto;
             background: radial-gradient(circle, #fff, #e0f7fa);
-            border: 4px solid #1abc9c;
+            border: 4px solid #ff6f61;
             border-radius: 50%;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -71,7 +74,7 @@
         .analog-clock::after {
             content: '';
             position: absolute;
-            background: #1abc9c;
+            background: #ff6f61;
         }
 
         .analog-clock::before {
@@ -101,13 +104,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            background: #1abc9c;
+            background: #ff6f61;
             color: white;
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
         .controls select:hover, .controls button:hover {
-            background: #16a085;
+            background: #ff3e3e;
             transform: scale(1.05);
         }
 
@@ -129,29 +132,6 @@
             margin-top: 20px;
         }
 
-        .country-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .country-list li {
-            margin: 5px;
-            padding: 10px;
-            background: #1abc9c;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .country-list li:hover {
-            background: #16a085;
-        }
-
         @media (max-width: 600px) {
             h1 {
                 font-size: 2rem;
@@ -162,7 +142,7 @@
             }
 
             .digital-clock {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
 
             .analog-clock {
@@ -353,53 +333,63 @@
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        const capitals = [
-            { name: "Nova York", lat: 40.7128, lng: -74.0060, tz: "America/New_York" },
-            { name: "Londres", lat: 51.5074, lng: -0.1278, tz: "Europe/London" },
-            { name: "Tóquio", lat: 35.6895, lng: 139.6917, tz: "Asia/Tokyo" },
-            { name: "Sydney", lat: -33.8688, lng: 151.2093, tz: "Australia/Sydney" },
-            { name: "Brasília", lat: -15.7801, lng: -47.9292, tz: "Brazil/East" },
-            { name: "Nova Déli", lat: 28.7041, lng: 77.1025, tz: "Asia/Kolkata" },
-            { name: "Cairo", lat: 30.0444, lng: 31.2357, tz: "Africa/Cairo" },
-            { name: "Paris", lat: 48.8566, lng: 2.3522, tz: "Europe/Paris" },
-            { name: "Pequim", lat: 39.9042, lng: 116.4074, tz: "Asia/Shanghai" },
-            { name: "Dubai", lat: 25.2048, lng: 55.2708, tz: "Asia/Dubai" },
-            { name: "Moscou", lat: 55.7558, lng: 37.6173, tz: "Europe/Moscow" },
-            { name: "Los Angeles", lat: 34.0522, lng: -118.2437, tz: "America/Los_Angeles" },
-            { name: "Chicago", lat: 41.8781, lng: -87.6298, tz: "America/Chicago" },
-            { name: "Cidade do México", lat: 19.4326, lng: -99.1332, tz: "America/Mexico_City" },
-            { name: "Bangcoc", lat: 13.7563, lng: 100.5018, tz: "Asia/Bangkok" },
-            { name: "Seul", lat: 37.5665, lng: 126.9780, tz: "Asia/Seoul" },
-            { name: "Jacarta", lat: -6.2088, lng: 106.8456, tz: "Asia/Jakarta" },
-            { name: "Berlim", lat: 52.5200, lng: 13.4050, tz: "Europe/Berlin" },
-            { name: "Roma", lat: 41.9028, lng: 12.4964, tz: "Europe/Rome" },
-            { name: "Madri", lat: 40.4165, lng: -3.7026, tz: "Europe/Madrid" },
-            { name: "Estocolmo", lat: 59.3293, lng: 18.0686, tz: "Europe/Stockholm" },
-            { name: "Istambul", lat: 41.0082, lng: 28.9784, tz: "Europe/Istanbul" },
-            // Adicione mais capitais conforme necessário...
-        ];
+        const countries = Array.from(document.getElementById('country-select').options).map(option => ({
+            name: option.text.split(' ')[0],
+            tz: option.value
+        }));
 
-        capitals.forEach(capital => {
-            const marker = L.marker([capital.lat, capital.lng]).addTo(map);
-            marker.bindPopup(`Horário em ${capital.name}: <span id="${capital.tz}-popup">${new Date().toLocaleTimeString("en-US", { timeZone: capital.tz })}</span>`);
+        countries.forEach(country => {
+            const capitalData = getCapitalCoordinates(country.name); // Função simulada para obter coordenadas
+            if (capitalData) {
+                const marker = L.marker([capitalData.lat, capitalData.lng]).addTo(map);
+                marker.bindPopup(`Horário em ${country.name}: <span id="${country.tz}-popup">${new Date().toLocaleTimeString("en-US", { timeZone: country.tz })}</span>`);
 
-            const li = document.createElement('li');
-            li.textContent = capital.name;
-            li.onclick = () => {
-                document.getElementById('country-select').value = capital.tz;
-                updateTime();
-            };
-            document.getElementById('map').appendChild(li); // Adiciona ao mapa
+                marker.on('click', () => {
+                    document.getElementById('country-select').value = country.tz;
+                    updateTime();
+                });
+            }
         });
 
         setInterval(() => {
-            capitals.forEach(capital => {
-                const popupElement = document.getElementById(`${capital.tz}-popup`);
+            countries.forEach(country => {
+                const popupElement = document.getElementById(`${country.tz}-popup`);
                 if (popupElement) {
-                    popupElement.textContent = new Date().toLocaleTimeString("en-US", { timeZone: capital.tz });
+                    popupElement.textContent = new Date().toLocaleTimeString("en-US", { timeZone: country.tz });
                 }
             });
         }, 1000);
+
+        // Função simulada para obter coordenadas das capitais
+        function getCapitalCoordinates(capitalName) {
+            const capitals = {
+                "Nova York": { lat: 40.7128, lng: -74.0060 },
+                "Londres": { lat: 51.5074, lng: -0.1278 },
+                "Tóquio": { lat: 35.6895, lng: 139.6917 },
+                "Sydney": { lat: -33.8688, lng: 151.2093 },
+                "Brasília": { lat: -15.7801, lng: -47.9292 },
+                "Nova Déli": { lat: 28.7041, lng: 77.1025 },
+                "Cairo": { lat: 30.0444, lng: 31.2357 },
+                "Paris": { lat: 48.8566, lng: 2.3522 },
+                "Pequim": { lat: 39.9042, lng: 116.4074 },
+                "Dubai": { lat: 25.2048, lng: 55.2708 },
+                "Moscou": { lat: 55.7558, lng: 37.6173 },
+                "Los Angeles": { lat: 34.0522, lng: -118.2437 },
+                "Chicago": { lat: 41.8781, lng: -87.6298 },
+                "Cidade do México": { lat: 19.4326, lng: -99.1332 },
+                "Bangcoc": { lat: 13.7563, lng: 100.5018 },
+                "Seul": { lat: 37.5665, lng: 126.9780 },
+                "Jacarta": { lat: -6.2088, lng: 106.8456 },
+                "Berlim": { lat: 52.5200, lng: 13.4050 },
+                "Roma": { lat: 41.9028, lng: 12.4964 },
+                "Madri": { lat: 40.4165, lng: -3.7026 },
+                "Estocolmo": { lat: 59.3293, lng: 18.0686 },
+                "Istambul": { lat: 41.0082, lng: 28.9784 },
+                // Adicione mais capitais conforme necessário...
+            };
+
+            return capitals[capitalName];
+        }
     </script>
 </body>
-                    </html>
+</html>
