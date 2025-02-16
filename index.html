@@ -14,20 +14,20 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #f7f7ff, #dfe9ff);
+            background: linear-gradient(135deg, #a8e063, #56ab2f);
             color: #333;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, #222, #333);
+            background: linear-gradient(135deg, #2c3e50, #1abc9c);
             color: #fff;
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
-            color: #4c6ef5;
+            color: #1abc9c;
         }
 
         .container {
@@ -53,7 +53,7 @@
         .digital-clock {
             font-size: 2rem;
             font-weight: bold;
-            color: #4c6ef5;
+            color: #1abc9c;
         }
 
         .analog-clock {
@@ -61,8 +61,8 @@
             width: 200px;
             height: 200px;
             margin: 0 auto;
-            background: radial-gradient(circle, #fff, #e0eafc);
-            border: 4px solid #4c6ef5;
+            background: radial-gradient(circle, #fff, #e0f7fa);
+            border: 4px solid #1abc9c;
             border-radius: 50%;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -71,7 +71,7 @@
         .analog-clock::after {
             content: '';
             position: absolute;
-            background: #4c6ef5;
+            background: #1abc9c;
         }
 
         .analog-clock::before {
@@ -101,13 +101,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            background: #4c6ef5;
+            background: #1abc9c;
             color: white;
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
         .controls select:hover, .controls button:hover {
-            background: #3b5bdb;
+            background: #16a085;
             transform: scale(1.05);
         }
 
@@ -141,7 +141,7 @@
         .country-list li {
             margin: 5px;
             padding: 10px;
-            background: #4c6ef5;
+            background: #1abc9c;
             color: white;
             border-radius: 5px;
             cursor: pointer;
@@ -149,7 +149,7 @@
         }
 
         .country-list li:hover {
-            background: #3b5bdb;
+            background: #16a085;
         }
 
         @media (max-width: 600px) {
@@ -184,6 +184,7 @@
         <div class="controls">
             <label for="country-select">Selecione um país:</label>
             <select id="country-select">
+                <!-- Lista de 100+ Países -->
                 <option value="America/New_York">Nova York (EST)</option>
                 <option value="Europe/London">Londres (GMT)</option>
                 <option value="Asia/Tokyo">Tóquio (JST)</option>
@@ -208,22 +209,90 @@
                 <option value="Europe/Madrid">Madri (CET)</option>
                 <option value="Europe/Stockholm">Estocolmo (CET)</option>
                 <option value="Europe/Istanbul">Istambul (TRT)</option>
+                <option value="Asia/Manila">Manila (PHT)</option>
+                <option value="Asia/Hong_Kong">Hong Kong (HKT)</option>
+                <option value="Asia/Singapore">Singapura (SGT)</option>
+                <option value="Asia/Tehran">Teerã (IRDT)</option>
+                <option value="Asia/Baku">Bacu (AZT)</option>
+                <option value="Asia/Yekaterinburg">Iekaterinburgo (YEKT)</option>
+                <option value="Asia/Krasnoyarsk">Krasnoiarsk (KRAT)</option>
+                <option value="Asia/Irkutsk">Irkutsk (IRKT)</option>
+                <option value="Asia/Yakutsk">Iacútia (YAKT)</option>
+                <option value="Asia/Vladivostok">Vladivostok (VLAT)</option>
+                <option value="Asia/Kamchatka">Petropavlovsk-Kamchatski (PETT)</option>
+                <option value="Europe/Athens">Atenas (EET)</option>
+                <option value="Europe/Bucharest">Bucareste (EET)</option>
+                <option value="Europe/Helsinki">Helsinque (EET)</option>
+                <option value="Europe/Warsaw">Varsóvia (CET)</option>
+                <option value="Europe/Prague">Praga (CET)</option>
+                <option value="Europe/Budapest">Budapeste (CET)</option>
+                <option value="Europe/Vienna">Viena (CET)</option>
+                <option value="Europe/Zurich">Zurique (CET)</option>
+                <option value="Europe/Amsterdam">Amsterdã (CET)</option>
+                <option value="Europe/Brussels">Bruxelas (CET)</option>
+                <option value="Europe/Copenhagen">Copenhague (CET)</option>
+                <option value="Europe/Oslo">Oslo (CET)</option>
+                <option value="Europe/Reykjavik">Reiquiavique (GMT)</option>
+                <option value="Europe/Dublin">Dublin (GMT)</option>
+                <option value="Europe/Lisbon">Lisboa (WET)</option>
+                <option value="Europe/Madrid">Madri (CET)</option>
+                <option value="Europe/Lisbon">Lisboa (WET)</option>
+                <option value="America/Sao_Paulo">São Paulo (BRT)</option>
+                <option value="America/Argentina/Buenos_Aires">Buenos Aires (ART)</option>
+                <option value="America/Montevideo">Montevidéu (UYT)</option>
+                <option value="America/Santiago">Santiago (CLT)</option>
+                <option value="America/Lima">Lima (PET)</option>
+                <option value="America/Caracas">Caracas (VET)</option>
+                <option value="America/Godthab">Nuuk (WGT)</option>
+                <option value="America/St_Johns">St. John's (NST)</option>
+                <option value="America/Halifax">Halifax (AST)</option>
+                <option value="America/Glace_Bay">Glace Bay (AST)</option>
+                <option value="America/Goose_Bay">Goose Bay (AST)</option>
+                <option value="America/Moncton">Moncton (AST)</option>
+                <option value="America/Blanc-Sablon">Blanc-Sablon (AST)</option>
+                <option value="America/Thule">Thule (ACT)</option>
+                <option value="America/Denver">Denver (MST)</option>
+                <option value="America/Phoenix">Phoenix (MST)</option>
+                <option value="America/Anchorage">Anchorage (AKST)</option>
+                <option value="America/Juneau">Juneau (AKST)</option>
+                <option value="America/Sitka">Sitka (AKST)</option>
+                <option value="America/Metlakatla">Metlakatla (AKST)</option>
+                <option value="America/Yakutat">Yakutat (AKST)</option>
+                <option value="America/Nome">Nome (AKST)</option>
+                <option value="America/Adak">Adak (HAST)</option>
+                <option value="America/Kwajalein">Kwajalein (MHT)</option>
+                <option value="Pacific/Midway">Midway (SST)</option>
+                <option value="Pacific/Tahiti">Tahiti (TAHT)</option>
+                <option value="Pacific/Marquesas">Marquesas (MAWT)</option>
+                <option value="Pacific/Gambier">Gambier (GAMT)</option>
+                <option value="Pacific/Easter">Ilha de Páscoa (EAST)</option>
+                <option value="Pacific/Fakaofo">Fakaofo (TKT)</option>
+                <option value="Pacific/Tongatapu">Tongatapu (TOT)</option>
+                <option value="Pacific/Auckland">Auckland (NZT)</option>
+                <option value="Pacific/Chatham">Chatham (CHAST)</option>
+                <option value="Pacific/Fiji">Fiji (FJT)</option>
+                <option value="Pacific/Guadalcanal">Guadalcanal (SBT)</option>
+                <option value="Pacific/Kosrae">Kosrae (KOST)</option>
+                <option value="Pacific/Pohnpei">Pohnpei (PONT)</option>
+                <option value="Pacific/Truk">Truk (CHST)</option>
+                <option value="Pacific/Saipan">Saipan (CHST)</option>
+                <option value="Pacific/Guam">Guam (CHST)</option>
+                <option value="Pacific/Port_Moresby">Port Moresby (PGT)</option>
+                <option value="Pacific/Noumea">Nouméa (NCT)</option>
+                <option value="Pacific/Efate">Efate (VUT)</option>
+                <option value="Pacific/Wallis">Wallis (WFT)</option>
+                <option value="Pacific/Apia">Apia (WST)</option>
+                <option value="Pacific/Majuro">Majuro (MHT)</option>
+                <option value="Pacific/Kwajalein">Kwajalein (MHT)</option>
             </select>
             <button onclick="toggleClockType()">Alternar Relógio</button>
             <button onclick="toggleDarkMode()">Alternar Modo Escuro</button>
         </div>
 
         <div id="time-difference" class="time-difference"></div>
-
-        <div id="favorites-section">
-            <h3>Favoritos</h3>
-            <ul id="favorites"></ul>
-            <button onclick="addToFavorites()">Adicionar aos Favoritos</button>
-        </div>
     </div>
 
     <div id="map"></div>
-    <ul class="country-list" id="country-list"></ul>
 
     <footer>
         Desenvolvido por Marlon Felipe | Todos os direitos reservados.
@@ -235,8 +304,6 @@
     <script>
         let clockType = 'digital';
         let intervalId = null;
-        let startTime = null;
-        let elapsedTime = 0;
 
         function updateTime() {
             const selectedCountry = document.getElementById('country-select').value;
@@ -279,29 +346,6 @@
             document.body.classList.toggle('dark-mode');
         }
 
-        function addToFavorites() {
-            const selectedCountry = document.getElementById('country-select').value;
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            if (!favorites.includes(selectedCountry)) {
-                favorites.push(selectedCountry);
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-                renderFavorites();
-            }
-        }
-
-        function renderFavorites() {
-            const favoritesList = document.getElementById('favorites');
-            favoritesList.innerHTML = '';
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            favorites.forEach(country => {
-                const li = document.createElement('li');
-                li.textContent = country;
-                favoritesList.appendChild(li);
-            });
-        }
-
-        renderFavorites();
-
         const map = L.map('map').setView([0, 0], 2);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -331,7 +375,8 @@
             { name: "Roma", lat: 41.9028, lng: 12.4964, tz: "Europe/Rome" },
             { name: "Madri", lat: 40.4165, lng: -3.7026, tz: "Europe/Madrid" },
             { name: "Estocolmo", lat: 59.3293, lng: 18.0686, tz: "Europe/Stockholm" },
-            { name: "Istambul", lat: 41.0082, lng: 28.9784, tz: "Europe/Istanbul" }
+            { name: "Istambul", lat: 41.0082, lng: 28.9784, tz: "Europe/Istanbul" },
+            // Adicione mais capitais conforme necessário...
         ];
 
         capitals.forEach(capital => {
@@ -344,7 +389,7 @@
                 document.getElementById('country-select').value = capital.tz;
                 updateTime();
             };
-            document.getElementById('country-list').appendChild(li);
+            document.getElementById('map').appendChild(li); // Adiciona ao mapa
         });
 
         setInterval(() => {
@@ -357,4 +402,4 @@
         }, 1000);
     </script>
 </body>
-</html>
+                    </html>
