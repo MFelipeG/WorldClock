@@ -246,25 +246,22 @@
         let clockType = 'digital';
         let intervalId = null;
 
-        // Função principal para atualizar o relógio
         function updateTime() {
             const selectedCountry = document.getElementById('country-select').value;
             const localTime = new Date();
-            const utcTime = localTime.getTime() + (localTime.getTimezoneOffset() * 60000);
-            const countryTime = new Date(Intl.DateTimeFormat().resolvedOptions().timeZone === selectedCountry ? utcTime : (new Date()).toLocaleString("en-US", { timeZone: selectedCountry }));
+            const countryTime = new Date().toLocaleString("en-US", { timeZone: selectedCountry });
 
             if (clockType === 'digital') {
-                document.getElementById('digital-clock').textContent = `Horário em ${selectedCountry}: ${countryTime.toLocaleTimeString()}`;
+                document.getElementById('digital-clock').textContent = `Horário em ${selectedCountry}: ${new Date(countryTime).toLocaleTimeString()}`;
             } else {
-                updateAnalogClock(countryTime);
+                updateAnalogClock(new Date(countryTime));
             }
 
-            const hoursDifference = Math.floor(Math.abs((localTime - countryTime) / 1000 / 60 / 60));
-            const minutesDifference = Math.floor(Math.abs((localTime - countryTime) / 1000 / 60) % 60);
+            const hoursDifference = Math.floor(Math.abs((localTime - new Date(countryTime)) / 1000 / 60 / 60));
+            const minutesDifference = Math.floor(Math.abs((localTime - new Date(countryTime)) / 1000 / 60) % 60);
             document.getElementById('time-difference').textContent = `Diferença de horário: ${hoursDifference} horas e ${minutesDifference} minutos`;
         }
 
-        // Atualiza o relógio analógico
         function updateAnalogClock(time) {
             const hour = time.getHours() % 12;
             const minute = time.getMinutes();
@@ -278,23 +275,21 @@
             document.querySelector('.minute-hand').style.transform = `translate(-50%, -50%) rotate(${minuteAngle}deg)`;
         }
 
-        // Inicializa o relógio ao carregar a página
         setInterval(updateTime, 1000);
 
-        // Alterna entre relógio digital e analógico
         function toggleClockType() {
             clockType = clockType === 'digital' ? 'analog' : 'digital';
             document.getElementById('digital-clock').style.display = clockType === 'digital' ? 'block' : 'none';
             document.querySelector('.analog-clock').style.display = clockType === 'analog' ? 'block' : 'none';
-            updateTime(); // Garante que o relógio seja atualizado imediatamente após a troca
+
+            // Garante que o relógio seja atualizado ao alternar
+            updateTime();
         }
 
-        // Alternar entre tema claro e escuro
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
         }
 
-        // Adiciona países à seção de comparação
         function addComparison() {
             const selectedCountry = document.getElementById('country-select').value;
             const comparisonList = document.getElementById('comparison-list');
@@ -302,19 +297,16 @@
 
             if (!existingItem) {
                 const li = document.createElement('li');
-                li.id = `comparison-${selectedCountry}`;
                 li.textContent = `${selectedCountry}: Carregando...`;
                 comparisonList.appendChild(li);
 
-                // Atualiza o horário dinamicamente
                 setInterval(() => {
-                    const countryTime = new Date().toLocaleTimeString("en-US", { timeZone: selectedCountry });
-                    li.textContent = `${selectedCountry}: ${countryTime}`;
+                    const countryTime = new Date().toLocaleString("en-US", { timeZone: selectedCountry });
+                    li.textContent = `${selectedCountry}: ${new Date(countryTime).toLocaleTimeString()}`;
                 }, 1000);
             }
         }
 
-        // Configuração do mapa
         const map = L.map('map').setView([0, 0], 2);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -333,7 +325,6 @@
                 const marker = L.marker([capitalData.lat, capitalData.lng]).addTo(map);
                 marker.bindPopup(`Horário em ${country.name}: <span id="${country.tz}-popup">${new Date().toLocaleTimeString("en-US", { timeZone: country.tz })}</span>`);
 
-                // Atualiza o relógio principal ao clicar no marcador
                 marker.on('click', () => {
                     document.getElementById('country-select').value = country.tz;
                     updateTime();
@@ -341,7 +332,6 @@
             }
         });
 
-        // Atualiza os horários nos popups do mapa
         setInterval(() => {
             countries.forEach(country => {
                 const popupElement = document.getElementById(`${country.tz}-popup`);
@@ -351,7 +341,6 @@
             });
         }, 1000);
 
-        // Coordenadas das capitais
         function getCapitalCoordinates(capitalName) {
             const capitals = {
                 "Nova York": { lat: 40.7128, lng: -74.0060 },
@@ -376,12 +365,13 @@
                 "Madri": { lat: 40.4165, lng: -3.7026 },
                 "Estocolmo": { lat: 59.3293, lng: 18.0686 },
                 "Istambul": { lat: 41.0082, lng: 28.9784 },
+                // Adicione mais capitais conforme necessário...
             };
 
             return capitals[capitalName];
         }
 
-        // Inicia o relógio ao carregar a página
+        // Garante que o relógio seja atualizado ao carregar a página
         updateTime();
     </script>
 </body>
